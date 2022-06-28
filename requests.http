@@ -1,0 +1,19 @@
+@url = http://localhost:3030
+
+GET {{url}}/accountOwner
+
+###
+
+POST {{url}}/accountOwner
+Content-Type: application/json
+
+{
+    "firstName": "Whistle",
+    "lastName": "Face",
+    "email": "boogiewoogie@live.com",
+    "password": "dancingqueen"
+}
+
+###
+
+GET {{url}}/accountOwner/boogiewoogie@live.com
