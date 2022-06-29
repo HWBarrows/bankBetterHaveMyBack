@@ -7,7 +7,7 @@ accountOwnerRouter
   .get('/', async (req, res, next) => {
     try {
       const accountOwner = await AccountOwner.find(req.query);
-      if (!accountOwner) {
+      if (!accountOwner[0]) {
         return next({ status: 404, message: 'Account not found' });
       } else {
         res.send(accountOwner);

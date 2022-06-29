@@ -8,12 +8,18 @@ POST {{url}}/accountOwner
 Content-Type: application/json
 
 {
-    "firstName": "Whistle",
-    "lastName": "Face",
-    "email": "boogiewoogie@live.com",
-    "password": "dancingqueen"
+    "firstName": "Doechii",
+    "lastName": "New",
+    "email": "crazy@live.com",
+    "password": "dancingqueenisdancing"
 }
 
 ###
 
-GET {{url}}/accountOwner/boogiewoogie@live.com
+POST  {{url}}/login
+Content-Type: application/json
+
+{
+    "email": "crazy@live.com",
+    "password": "dancingqueenisdancing"
+}
