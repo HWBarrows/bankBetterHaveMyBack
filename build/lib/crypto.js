@@ -21,7 +21,6 @@ exports.hash = hash;
 function validHash(password, hash) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield bcrypt_1.default.compare(password, hash);
-        console.log(result);
         return result;
     });
 }

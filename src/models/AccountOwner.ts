@@ -1,4 +1,4 @@
-import mongoose, { Model, SchemaTypes } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 const { Schema, model } = mongoose;
 import { hash, validHash } from '../lib/crypto';
 
@@ -7,7 +7,14 @@ interface IAccountOwner {
   lastName: string;
   email: string;
   password: string;
-  accounts: string;
+  accounts: [
+    {
+      owner: string;
+      accountBalance: number;
+      accountType: string;
+      accountActivity: [string];
+    }
+  ];
 }
 interface AccountOwnerModel extends Model<IAccountOwner> {
   signup(data: {
@@ -19,12 +26,23 @@ interface AccountOwnerModel extends Model<IAccountOwner> {
   login(data: { email: string; password: string }): boolean;
 }
 
+const addressSchema = new Schema(
+  {
+    street: { type: String, trim: true, required: true },
+    zipcode: { type: String, required: true },
+    city: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true }
+  },
+  { _id: false }
+);
+
 const accountOwnerSchema = new Schema(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
+    firstName: { type: String, required: true, trim: true },
+    lastName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    primaryAddress: { type: addressSchema, required: true },
+    password: { type: String, required: true, trim: true },
     accounts: { type: [Schema.Types.ObjectId], ref: 'account' }
   },
   { timestamps: true }

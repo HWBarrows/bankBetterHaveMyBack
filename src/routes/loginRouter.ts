@@ -14,7 +14,7 @@ loginRouter.post('/', async (req, res, next) => {
           'Account not found, please check your email address and try again'
       });
     }
-
+    //await needed on the following line to return the populated validAccountOwner object
     const validAccountOwner = await AccountOwner.login(req.body);
     if (validAccountOwner) {
       return res.send(validAccountOwner);

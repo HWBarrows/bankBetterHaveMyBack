@@ -20,18 +20,17 @@ loginRouter.post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, func
         const currentAccountOwner = yield AccountOwner_1.default.find({
             email: req.body.email
         });
-        if (!currentAccountOwner[0]._id) {
+        if (!currentAccountOwner[0]) {
             return res.status(400).send({
                 error: 'Account not found, please check your email address and try again'
             });
         }
-        const validOwner = AccountOwner_1.default.login(req.body);
-        if (!validOwner) {
-            return res.status(401).send({
-                error: 'Invalid credentials, please check your password and try again'
-            });
+        //await needed on the following line to return the populated validAccountOwner object
+        const validAccountOwner = yield AccountOwner_1.default.login(req.body);
+        if (validAccountOwner) {
+            return res.send(validAccountOwner);
         }
-        res.send(currentAccountOwner);
+        res.status(401).send({ error: 'Invalid credentials, please try again' });
     }
     catch (error) {
         next(error);

@@ -5,6 +5,7 @@ import connect from './lib/connect';
 import globalErrorHandler from './middlewares/globalErrorHandler';
 import accountOwnerRouter from './routes/accountOwnerRouter';
 import loginRouter from './routes/loginRouter';
+import accountRouter from './routes/accountRouter';
 
 const app = express();
 dotenv.config();
@@ -13,6 +14,7 @@ connect();
 app.use(express.json());
 app.use(cors());
 app.use('/accountOwner', accountOwnerRouter);
+app.use('/account', accountRouter);
 app.use('/login', loginRouter);
 app.use(globalErrorHandler);
 const port = process.env.PORT;
