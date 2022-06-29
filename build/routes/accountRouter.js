@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Account_1 = __importDefault(require("../models/Account"));
+const AccountOwner_1 = __importDefault(require("../models/AccountOwner"));
 const accountRouter = express_1.default.Router();
 accountRouter
     .get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,8 +33,15 @@ accountRouter
 }))
     .post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const owner = yield AccountOwner_1.default.findById(req.body.owner);
+        if (!owner) {
+            return next({ status: 401, message: 'Account owner not found' });
+        }
         const newAccount = yield Account_1.default.create(req.body);
         if (newAccount) {
+            //@ts-ignore
+            owner.accounts.push(newAccount);
+            yield owner.save();
             return res.send(newAccount);
         }
         res

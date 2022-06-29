@@ -13,7 +13,9 @@ const accountSchema = new Schema({
     },
     accountBalance: { type: Number, required: true, default: 0 },
     accountType: { type: String, enum: ['savings', 'checking', 'credit'] },
-    accountActivity: { type: [String] }
+    accountActivity: { type: [String] },
+    creditCardNumber: { type: String },
+    cardSecurityCode: { type: Number }
 }, { timestamps: true });
 const Account = model('account', accountSchema);
 exports.default = Account;
