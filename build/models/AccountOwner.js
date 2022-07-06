@@ -17,8 +17,9 @@ const { Schema, model } = mongoose_1.default;
 const crypto_1 = require("../lib/crypto");
 const addressSchema = new Schema({
     street: { type: String, trim: true, required: true },
-    zipcode: { type: String, required: true },
     city: { type: String, required: true, trim: true },
+    state: { type: String, trim: true },
+    zipcode: { type: String, required: true },
     country: { type: String, required: true, trim: true }
 }, { _id: false });
 const accountOwnerSchema = new Schema({

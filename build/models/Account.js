@@ -6,14 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const { Schema, model } = mongoose_1.default;
 const accountSchema = new Schema({
-    owner: {
+    accountOwner: {
         type: Schema.Types.ObjectId,
         ref: 'accountOwner',
         required: true
     },
     accountBalance: { type: Number, required: true, default: 0 },
+    accountCurrency: { type: String, required: true },
     accountType: { type: String, enum: ['savings', 'checking', 'credit'] },
-    accountActivity: { type: [String] },
+    accountActivity: { type: [Object] },
     creditCardNumber: { type: String },
     cardSecurityCode: { type: Number }
 }, { timestamps: true });

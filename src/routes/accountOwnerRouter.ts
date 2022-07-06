@@ -3,6 +3,7 @@ import AccountOwner from '../models/AccountOwner';
 
 const accountOwnerRouter = express.Router();
 
+//This endpoint creates new accountOwners, and also login
 accountOwnerRouter
   .get('/', async (req, res, next) => {
     try {
@@ -29,6 +30,7 @@ accountOwnerRouter
       next(error);
     }
   })
+  // why is this here
   .get('/:email', async (req, res, next) => {
     try {
       const currentAccountOwner = await AccountOwner.find({
