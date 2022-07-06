@@ -19,15 +19,15 @@ accountRouter
   })
   .post('/', async (req, res, next) => {
     try {
-      const owner = await AccountOwner.findById(req.body.owner);
-      if (!owner) {
+      const accountOwner = await AccountOwner.findById(req.body.accountOwner);
+      if (!accountOwner) {
         return next({ status: 401, message: 'Account owner not found' });
       }
       const newAccount: {} = await Account.create(req.body);
       if (newAccount) {
         //@ts-ignore
-        owner.accounts.push(newAccount);
-        await owner.save();
+        accountOwner.accounts.push(newAccount);
+        await accountOwner.save();
         return res.send(newAccount);
       }
       res
@@ -37,6 +37,7 @@ accountRouter
       next(error);
     }
   })
+  //this patch request is to update the balance.
   .patch('/:id', async (req, res, next) => {
     try {
       const options = { new: true, runValidators: true };
@@ -50,6 +51,18 @@ accountRouter
         return next({ status: 404, message: 'Account not found' });
       }
       res.send(updatedAccount);
+    } catch (error) {
+      next(error);
+    }
+  })
+  //this put is to record transactions in the accountActivity array
+  .put('/:id', async (req, res, next) => {
+    try {
+      const account = await Account.updateOne(
+        { _id: req.params.id },
+        { $push: { accountActivity: req.body } }
+      );
+      res.send(account);
     } catch (error) {
       next(error);
     }

@@ -11,6 +11,11 @@ Content-Type: application/json
     "firstName": "Doechii",
     "lastName": "New",
     "email": "crazy@live.com",
+    "primaryAddress": {"street": "172 Clarkson Ave",
+                        "city": "Brooklyn",
+                        "zipcode": "11348",
+                        "country": "United States"
+    },
     "password": "dancingqueenisdancing"
 }
 
@@ -22,4 +27,26 @@ Content-Type: application/json
 {
     "email": "crazy@live.com",
     "password": "dancingqueenisdancing"
+}
+
+###
+
+GET {{url}}/account
+
+###
+POST {{url}}/account
+Content-Type: application/json
+
+{
+    "owner": "62bc12c53cdee36c55baba46"
+    
+}
+
+###
+
+PATCH {{url}}/account/62bc12e43cdee36c55baba49
+Content-Type: application/json
+
+{
+    "accountBalance": 1200
 }

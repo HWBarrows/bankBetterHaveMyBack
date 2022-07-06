@@ -23,14 +23,16 @@ interface AccountOwnerModel extends Model<IAccountOwner> {
     email: string;
     password: string;
   }): string;
+
   login(data: { email: string; password: string }): boolean;
 }
 
 const addressSchema = new Schema(
   {
     street: { type: String, trim: true, required: true },
-    zipcode: { type: String, required: true },
     city: { type: String, required: true, trim: true },
+    state: { type: String, trim: true },
+    zipcode: { type: String, required: true },
     country: { type: String, required: true, trim: true }
   },
   { _id: false }
