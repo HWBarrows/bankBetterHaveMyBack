@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const AccountOwner_1 = __importDefault(require("../models/AccountOwner"));
 const accountOwnerRouter = express_1.default.Router();
+//This endpoint creates new accountOwners, and also login
 accountOwnerRouter
     .get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -44,6 +45,7 @@ accountOwnerRouter
         next(error);
     }
 }))
+    // why is this here
     .get('/:email', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const currentAccountOwner = yield AccountOwner_1.default.find({

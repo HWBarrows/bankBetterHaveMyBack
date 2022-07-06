@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const Account_1 = __importDefault(require("../models/Account"));
+const AccountOwner_1 = __importDefault(require("../models/AccountOwner"));
 const accountRouter = express_1.default.Router();
 accountRouter
     .get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,8 +33,15 @@ accountRouter
 }))
     .post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const accountOwner = yield AccountOwner_1.default.findById(req.body.accountOwner);
+        if (!accountOwner) {
+            return next({ status: 401, message: 'Account owner not found' });
+        }
         const newAccount = yield Account_1.default.create(req.body);
         if (newAccount) {
+            //@ts-ignore
+            accountOwner.accounts.push(newAccount);
+            yield accountOwner.save();
             return res.send(newAccount);
         }
         res
@@ -44,6 +52,7 @@ accountRouter
         next(error);
     }
 }))
+    //this patch request is to update the balance.
     .patch('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const options = { new: true, runValidators: true };
@@ -53,6 +62,16 @@ accountRouter
             return next({ status: 404, message: 'Account not found' });
         }
         res.send(updatedAccount);
+    }
+    catch (error) {
+        next(error);
+    }
+}))
+    //this put is to record transactions in the accountActivity array
+    .put('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const account = yield Account_1.default.updateOne({ _id: req.params.id }, { $push: { accountActivity: req.body } });
+        res.send(account);
     }
     catch (error) {
         next(error);
