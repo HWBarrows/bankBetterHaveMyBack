@@ -8,8 +8,9 @@ interface IAccount {
   accountCurrency: string;
   accountType: string;
   accountActivity: [string];
-  creditCardNumber: string;
+  cardNumber: string;
   cardSecurityCode: number;
+  cardExpiry: string;
 }
 
 const accountSchema = new Schema(
@@ -23,8 +24,9 @@ const accountSchema = new Schema(
     accountCurrency: { type: String, required: true },
     accountType: { type: String, enum: ['savings', 'checking', 'credit'] },
     accountActivity: { type: [Object] },
-    creditCardNumber: { type: String },
-    cardSecurityCode: { type: Number }
+    cardNumber: { type: String },
+    cardSecurityCode: { type: Number },
+    cardExpiry: { type: String }
   },
   { timestamps: true }
 );

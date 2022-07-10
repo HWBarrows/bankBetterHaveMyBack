@@ -5,9 +5,10 @@ import AccountOwner from '../models/AccountOwner';
 const accountRouter = express.Router();
 
 accountRouter
-  .get('/', async (req, res, next) => {
+  //this populates the info in the home page for the onClick function
+  .get('/:id', async (req, res, next) => {
     try {
-      const accounts = await Account.find(req.query);
+      const accounts = await Account.findById(req.params.id);
       if (!accounts) {
         return next({ status: 404, message: 'No accounts found' });
       } else {
@@ -17,6 +18,7 @@ accountRouter
       next(error);
     }
   })
+  //this post request creates a new account
   .post('/', async (req, res, next) => {
     try {
       const accountOwner = await AccountOwner.findById(req.body.accountOwner);
@@ -37,7 +39,7 @@ accountRouter
       next(error);
     }
   })
-  //this patch request is to update the balance.
+  //this patch adds credit card to account ONLY
   .patch('/:id', async (req, res, next) => {
     try {
       const options = { new: true, runValidators: true };
@@ -55,12 +57,20 @@ accountRouter
       next(error);
     }
   })
-  //this put is to record transactions in the accountActivity array
-  .put('/:id', async (req, res, next) => {
+
+  //this put records financial transactions made with specified account id or credit card number
+  .put('/', async (req, res, next) => {
+    const options = { new: true, runValidators: true };
+    const filter = req.body.identifier;
+    const update = {
+      accountBalance: req.body.accountBalance,
+      accountActivity: req.body.accountActivity
+    };
     try {
-      const account = await Account.updateOne(
-        { _id: req.params.id },
-        { $push: { accountActivity: req.body } }
+      const account = await Account.findOneAndUpdate(
+        req.body.identifier,
+        update,
+        { new: true }
       );
       res.send(account);
     } catch (error) {

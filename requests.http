@@ -44,9 +44,10 @@ Content-Type: application/json
 
 ###
 
-PATCH {{url}}/account/62bc12e43cdee36c55baba49
+PATCH {{url}}/account/62c55720e79e8b960e4e7579
 Content-Type: application/json
 
 {
-    "accountBalance": 1200
+    "accountBalance": 1200,
+    "accountActivity": [{"timeStamp":"Wed, 06 Jul 2022 12:59:40 GMT","from":"Spotify","type":"deposit","amount":3800,"currency":"USD"}]
 }
