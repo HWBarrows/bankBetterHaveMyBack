@@ -31,23 +31,21 @@ Content-Type: application/json
 
 ###
 
-GET {{url}}/account
+GET {{url}}/account/62c55720e79e8b960e4e7579
 
 ###
 POST {{url}}/account
 Content-Type: application/json
 
 {
-    "owner": "62bc12c53cdee36c55baba46"
+    "accountOwner": "62cab960e7eb569e5c317f7e",
+    "accountCurrency": "EUR",
+    "accountType": "checking"
     
 }
 
 ###
 
-PATCH {{url}}/account/62c55720e79e8b960e4e7579
+PUT {{url}}/account/
 Content-Type: application/json
 
-{
-    "accountBalance": 1200,
-    "accountActivity": [{"timeStamp":"Wed, 06 Jul 2022 12:59:40 GMT","from":"Spotify","type":"deposit","amount":3800,"currency":"USD"}]
-}

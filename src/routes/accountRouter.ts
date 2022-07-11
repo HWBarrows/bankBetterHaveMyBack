@@ -24,9 +24,14 @@ accountRouter
       const accountOwner = await AccountOwner.findById(req.body.accountOwner);
       if (!accountOwner) {
         return next({ status: 401, message: 'Account owner not found' });
+      } else if (accountOwner.accounts.length > 4) {
+        return next({
+          status: 406,
+          message: 'Too many accounts, unable to add more'
+        });
       }
       const newAccount: {} = await Account.create(req.body);
-      if (newAccount) {
+      if (newAccount && accountOwner.accounts.length < 5) {
         //@ts-ignore
         accountOwner.accounts.push(newAccount);
         await accountOwner.save();
@@ -35,24 +40,6 @@ accountRouter
       res
         .status(400)
         .send({ error: 'Could not complete registration, please try again' });
-    } catch (error) {
-      next(error);
-    }
-  })
-  //this patch adds credit card to account ONLY
-  .patch('/:id', async (req, res, next) => {
-    try {
-      const options = { new: true, runValidators: true };
-      const id = req.params.id;
-      const updatedAccount = await Account.findByIdAndUpdate(
-        id,
-        req.body,
-        options
-      );
-      if (!updatedAccount) {
-        return next({ status: 404, message: 'Account not found' });
-      }
-      res.send(updatedAccount);
     } catch (error) {
       next(error);
     }
