@@ -15,6 +15,9 @@ interface IAccountOwner {
       accountActivity: [string];
     }
   ];
+  cardNumber?: string;
+  cardSecurityCode?: number;
+  cardExpiry?: string;
 }
 interface AccountOwnerModel extends Model<IAccountOwner> {
   signup(data: {
@@ -45,7 +48,10 @@ const accountOwnerSchema = new Schema(
     email: { type: String, required: true, unique: true },
     primaryAddress: { type: addressSchema, required: true },
     password: { type: String, required: true, trim: true },
-    accounts: { type: [Schema.Types.ObjectId], ref: 'account' }
+    accounts: { type: [Schema.Types.ObjectId], ref: 'account' },
+    cardNumber: { type: String },
+    cardSecurityCode: { type: Number },
+    cardExpiry: { type: String }
   },
   { timestamps: true }
 );

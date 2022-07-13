@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const AccountOwner_1 = __importDefault(require("../models/AccountOwner"));
 const accountOwnerRouter = express_1.default.Router();
-//This endpoint creates new accountOwners, and also login
 accountOwnerRouter
+    //I think this endpoint does nothing and is a security concern
     .get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountOwner = yield AccountOwner_1.default.find(req.query);
+        // accountOwner.populate()
         if (!accountOwner[0]) {
             return next({ status: 404, message: 'Account not found' });
         }
@@ -31,6 +32,7 @@ accountOwnerRouter
         next(error);
     }
 }))
+    //This endpoint creates new accountOwners
     .post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newAccountOwner = yield AccountOwner_1.default.signup(req.body);
@@ -45,18 +47,16 @@ accountOwnerRouter
         next(error);
     }
 }))
-    // why is this here
-    .get('/:email', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    //this creates a virtual credit card
+    .patch('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const currentAccountOwner = yield AccountOwner_1.default.find({
-            email: req.params.email
-        });
-        if (!currentAccountOwner) {
-            return res.status(400).send({
-                error: 'Account not found, please check your email address and try again'
-            });
+        const options = { new: true, runValidators: true };
+        const id = req.params.id;
+        const updatedAccount = yield AccountOwner_1.default.findByIdAndUpdate(id, req.body, options);
+        if (!updatedAccount) {
+            return next({ status: 404, message: 'Account not found' });
         }
-        return res.send(currentAccountOwner);
+        res.send(updatedAccount);
     }
     catch (error) {
         next(error);
