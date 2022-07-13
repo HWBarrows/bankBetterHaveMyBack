@@ -17,9 +17,10 @@ const Account_1 = __importDefault(require("../models/Account"));
 const AccountOwner_1 = __importDefault(require("../models/AccountOwner"));
 const accountRouter = express_1.default.Router();
 accountRouter
-    .get('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    //this populates the info in the home page for the onClick function
+    .get('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accounts = yield Account_1.default.find(req.query);
+        const accounts = yield Account_1.default.findById(req.params.id);
         if (!accounts) {
             return next({ status: 404, message: 'No accounts found' });
         }
@@ -31,14 +32,21 @@ accountRouter
         next(error);
     }
 }))
+    //this post request creates a new account
     .post('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const accountOwner = yield AccountOwner_1.default.findById(req.body.accountOwner);
         if (!accountOwner) {
             return next({ status: 401, message: 'Account owner not found' });
         }
+        else if (accountOwner.accounts.length > 4) {
+            return next({
+                status: 406,
+                message: 'Too many accounts, unable to add more'
+            });
+        }
         const newAccount = yield Account_1.default.create(req.body);
-        if (newAccount) {
+        if (newAccount && accountOwner.accounts.length < 5) {
             //@ts-ignore
             accountOwner.accounts.push(newAccount);
             yield accountOwner.save();
@@ -52,25 +60,16 @@ accountRouter
         next(error);
     }
 }))
-    //this patch request is to update the balance.
-    .patch('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    //this put records financial transactions made with specified account id or credit card number
+    .put('/', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const options = { new: true, runValidators: true };
+    const filter = req.body.identifier;
+    const update = {
+        accountBalance: req.body.accountBalance,
+        accountActivity: req.body.accountActivity
+    };
     try {
-        const options = { new: true, runValidators: true };
-        const id = req.params.id;
-        const updatedAccount = yield Account_1.default.findByIdAndUpdate(id, req.body, options);
-        if (!updatedAccount) {
-            return next({ status: 404, message: 'Account not found' });
-        }
-        res.send(updatedAccount);
-    }
-    catch (error) {
-        next(error);
-    }
-}))
-    //this put is to record transactions in the accountActivity array
-    .put('/:id', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const account = yield Account_1.default.updateOne({ _id: req.params.id }, { $push: { accountActivity: req.body } });
+        const account = yield Account_1.default.findOneAndUpdate(req.body.identifier, update, { new: true });
         res.send(account);
     }
     catch (error) {
