@@ -10,7 +10,7 @@ Content-Type: application/json
 {
     "firstName": "Doechii",
     "lastName": "New",
-    "email": "crazy@live.com",
+    "email": "goingcrazy@live.com",
     "primaryAddress": {"street": "172 Clarkson Ave",
                         "city": "Brooklyn",
                         "zipcode": "11348",
@@ -25,22 +25,23 @@ POST  {{url}}/login
 Content-Type: application/json
 
 {
-    "email": "crazy@live.com",
+    "email": "goingcrazy@live.com",
     "password": "dancingqueenisdancing"
 }
 
 ###
 
-GET {{url}}/account/62c55720e79e8b960e4e7579
+GET {{url}}/account/
 
 ###
 POST {{url}}/account
 Content-Type: application/json
 
 {
-    "accountOwner": "62cab960e7eb569e5c317f7e",
+    "accountOwner": "62cff187b5ea7c0b9cb25af8",
     "accountCurrency": "EUR",
-    "accountType": "checking"
+    "accountType": "checking",
+    "accountBalance": 132
     
 }
 

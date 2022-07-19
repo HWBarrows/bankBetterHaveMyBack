@@ -45,20 +45,18 @@ accountRouter
     }
   })
 
-  //this put records financial transactions made with specified account id or credit card number
+  //this put records financial transactions made with specified account id
   .put('/', async (req, res, next) => {
     const options = { new: true, runValidators: true };
-    const filter = req.body.identifier;
+    const filter = { _id: req.body.recipient };
     const update = {
       accountBalance: req.body.accountBalance,
       accountActivity: req.body.accountActivity
     };
     try {
-      const account = await Account.findOneAndUpdate(
-        req.body.identifier,
-        update,
-        { new: true }
-      );
+      const account = await Account.findOneAndUpdate(filter, update, {
+        new: true
+      });
       res.send(account);
     } catch (error) {
       next(error);

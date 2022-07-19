@@ -5,11 +5,15 @@ const accountOwnerRouter = express.Router();
 
 accountOwnerRouter
   //I think this endpoint does nothing and is a security concern
-  .get('/', async (req, res, next) => {
+  .get('/', async (req, res) => {
+    const accountOwner = await AccountOwner.find(req.query);
+    res.send(accountOwner);
+  })
+  .get('/:id', async (req, res, next) => {
     try {
-      const accountOwner = await AccountOwner.find(req.query);
+      const accountOwner = await AccountOwner.findById(req.params.id);
       // accountOwner.populate()
-      if (!accountOwner[0]) {
+      if (!accountOwner) {
         return next({ status: 404, message: 'Account not found' });
       } else {
         res.send(accountOwner);
